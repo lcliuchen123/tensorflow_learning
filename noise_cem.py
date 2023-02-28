@@ -21,17 +21,17 @@ def noisy_evaluation(env, W, render=False):
      returns reward from that episode"""
     reward_sum = 0
     state, _ = env.reset()
-    print("first state: ", state)
+    # print("first state: ", state)
     t = 0
     while True:
         t += 1
-        print("state: ", state)
-        print("W: ", W)
-        print(np.dot(W, state))
+        # print("state: ", state)
+        # print("W: ", W)
+        # print(np.dot(W, state))
         action = int(np.dot(W, state) > 0)  # use parameters/state to choose action
-        print(env.step(action))
+        # print(env.step(action))
         state, reward, done, info, _ = env.step(action)
-        print("after state: ", state)
+        # print("after state: ", state)
         reward_sum += reward
         if render and t % 3 == 0:
             env.render()
