@@ -55,14 +55,14 @@ def get_constant_noise(step):
 
 
 running_reward = 0
-n = 40
+n = 100
 p = 8
-n_iter = 20
+n_iter = 200
 render = False
 
 state = env.reset()
 i = 0
-while i < n_iter:
+while i < n_iter and min(sigma) > 0:
     # initialize an array of parameter vectors
     wvector_array = init_params(mu, sigma, n)
     reward_sums = np.zeros((n))
@@ -76,16 +76,20 @@ while i < n_iter:
     # pick p vectors with highest reward
     top_vectors = wvector_array[rankings, :]
     top_vectors = top_vectors[-p:, :]
-    print("top vectors shpae:{}".format(top_vectors.shape))
+    # print("top vectors shape:{}".format(top_vectors.shape))
 
     # fit new gaussian from which to sample policy
     for q in range(top_vectors.shape[1]):
         mu[q] = top_vectors[:, q].mean()
         sigma[q] = top_vectors[:, q].std() + get_constant_noise(i)
-
-    running_reward = 0.99 * running_reward + 0.01 * reward_sums.mean()
     print("#############################################################################")
+    # print("i: ", i)
+    # print("mu: ", mu)
+    # print("sigma: ", sigma)
+    # print("sigma_quare: \t", sum([x*x for x in sigma]))
+    running_reward = 0.99 * running_reward + 0.01 * reward_sums.mean()
     print("iteration:{},mean reward:{}, running reward mean:{} \n"
           " reward range:{} to {},".format(i, reward_sums.mean(),
                                            running_reward, reward_sums.min(), reward_sums.max()))
+    # print('top_vectors: ', top_vectors)
     i += 1

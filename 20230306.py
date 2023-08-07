@@ -8,6 +8,8 @@ from tensorflow import keras
 
 print(tf.version.VERSION)
 
+tf.keras.models.load_model
+
 (train_images, train_labels), (test_images, test_labels) = tf.keras.datasets.mnist.load_data()
 
 train_labels = train_labels[:1000]
@@ -103,9 +105,9 @@ print("Restored model, accuracy: {:5.2f}%".format(100 * acc))
 # 保存整个权重 pb文件
 model = create_model()
 model.fit(train_images, train_labels, epochs=5)
-model.save('saved_model/my_model')
+model.save('old_saved_model/my_model')
 
-new_model = tf.keras.models.load_model('saved_model/my_model')
+new_model = tf.keras.models.load_model('old_saved_model/my_model')
 
 # 检查模型结构
 new_model.summary()

@@ -139,6 +139,7 @@ test_dataset = test_dataset.batch(BATCH_SIZE)
 
 # 可以利用pandas的列代替特征列feature_column
 df = pd.read_csv('file.csv')
+# 输入是一个字典
 inputs = {key: tf.keras.layers.Input(shape=(), name=key) for key in df.keys()}
 x = tf.stack(list(inputs.values()), axis=-1)
 x = tf.keras.layers.Dense(10, activation='relu')(x)
