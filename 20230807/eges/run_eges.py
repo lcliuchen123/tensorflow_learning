@@ -8,7 +8,6 @@ import tensorflow_recommenders_addons as tfra
 import time
 import argparse
 import random
-# from arsenal_magic.graph.application.worflow_map import WorkflowMap
 from datetime import datetime, timedelta
 from EGES_model_4 import *
 from itertools import chain
@@ -81,11 +80,6 @@ def get_dataset_mask(pair_file_names_train, side_info_file_name):
     dict_lianxu = {i: tf.float32 for i in lianxu_feature}
     dict_array = {i: tf.int64 for i in array_feature}
     dict_lisan = {i: tf.int64 for i in lisan_feature}
-    # generator_output_types = {**dict_lisan, **dict_array, **dict_lianxu, **{"geek_id": tf.int64, "labels": tf.int64}}
-    # generator_output_shapes = {**{i: [None, 1] for i in lianxu_feature + lisan_feature},
-    #                            **{i: [None, 3] for i in array_feature},
-    #                            **{"geek_id": [None, 1], "labels": [None, 1]}}
-
     generator_output_types = ({**dict_lisan, **dict_array, **dict_lianxu, **{"geek_id": tf.int64, "labels": tf.int64}},
                               tf.int64)
     generator_output_shapes = ({**{i: [None, 1] for i in lianxu_feature + lisan_feature},
@@ -288,6 +282,7 @@ if __name__ == '__main__':
     tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, update_freq=100)
     options = tf.saved_model.SaveOptions(namespace_whitelist=['TFRA'])
     # 不同版本参数设置不一样，tf2.6.3 patience表示多少个epoch变化小于min_delta终止训练
+    # 也可以自定义回调函数，指定step结束训练
     early_stopping = tf.keras.callbacks.EarlyStopping(monitor='loss',
                                                       patience=args.max_epochs_without_improvement,
                                                       min_delta=1,

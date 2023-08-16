@@ -45,8 +45,8 @@ def build_input_embedding(fea_name_list, inputs_dict, embedding_dim, initializer
     fea_id_tensors_concat = tf.keras.layers.Concatenate(axis=1)(fea_id_tensors)
     # print("fea_id_tensors_concat: ", fea_id_tensors_concat)
 
-    # tfra gpu
-    gpu_device = "/job:localhost/replica:0/task:0/GPU:0"
+    # tfra cpu / gpu都可以，主要是为了存储
+    gpu_device = "/job:localhost/replica:0/task:0/CPU:0"
     # print("embedding_dim: ", embedding_dim)
     fea_embedding_out_concat = EmbeddingLayerGPU(
         embedding_size=embedding_dim,
@@ -55,7 +55,7 @@ def build_input_embedding(fea_name_list, inputs_dict, embedding_dim, initializer
         initializer=initializer,
         devices=gpu_device,
         name="UnifiedDynamicEmbedding",
-        init_capacity=1000000 * 4,
+        init_capacity=1000000,
         kv_creator=None)(fea_id_tensors_concat)
 
     # 解析embedding
@@ -129,7 +129,7 @@ def build_model(lr, embedding_dim, is_training, num_nodes, n_sampled, feature_na
     # print("===stack_embed: ===\n", stack_embed)
 
     # tfra定义权重
-    gpu_device = "/job:localhost/replica:0/task:0/GPU:0"
+    gpu_device = "/job:localhost/replica:0/task:0/CPU:0"
     alpha_embedding = EmbeddingLayerGPU(
         embedding_size=len(feature_names),
         key_dtype=tf.int64,
