@@ -58,8 +58,10 @@ def decay(epoch):
         return 1e-5
 
 
+# 自定义回调函数
 class PrintLR(tf.keras.callbacks.Callback):
     def on_epoch_end(self, epoch, logs=None):
+        """epoch结束的时候"""
         print('\nLearning rate for epoch {} is {}'.format(epoch+1, model.optimizer.lr.numpy()))
 
 
@@ -74,6 +76,7 @@ callbacks = [
 EPOCHS = 12
 model.fit(train_dataset, epochs=EPOCHS, callbacks=callbacks)
 
+# 加载模型
 model.load_weights(tf.train.latest_checkpoint(checkpoint_dir))
 eval_loss, eval_acc = model.evaluate(eval_dataset)
 print("Eval loss: {}, Eval accuracy:{} ".format(eval_loss, eval_acc))
@@ -99,4 +102,5 @@ with strategy.scope():
                              metrics=['accuracy'])
     eval_loss, eval_acc = replicated_model.evaluate(eval_dataset)
     print('Eval loss: {}, Eval Accuracy: {}'.format(eval_loss, eval_acc))
+
 
