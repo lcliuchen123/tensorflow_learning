@@ -168,11 +168,11 @@ def build_din_model(lr, num_items, emb_dim, is_attention, num_shops, num_cates):
     din_attention = tf.keras.layers.Lambda(lambda x: tf.reshape(x, [-1, 3 * emb_dim]))(din_attention)
 
     # concat embedding 拼接embedding层
-    print(user_item_emb_fea.shape)
-    print(din_attention.shape)
-    print(target_seq_emb.shape)
+    print("user_item_emb_fea: ", user_item_emb_fea.shape)
+    print("din_attention: ", din_attention.shape)
+    print("target_seq_emb: ", target_seq_emb.shape)
     join_emb = tf.concat([user_item_emb_fea, din_attention, target_seq_emb], -1)
-    print(join_emb.shape)
+    print("join_emb: ", join_emb.shape)
 
     # 再经过两层到输出
     fc1 = tf.keras.layers.Dense(200, activation="relu")(join_emb)
